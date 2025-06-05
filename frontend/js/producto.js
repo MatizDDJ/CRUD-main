@@ -1,5 +1,5 @@
 // URL base del endpoint
-const API_URL = "http://localhost/api_productos.php"; // Cambia esta URL según corresponda
+const API_URL = "http://localhost/CRUD-main/backend/api_productos.php"; // Cambia esta URL según corresponda
 
 // Obtener todos los productos (GET)
 function listarProductos() {
