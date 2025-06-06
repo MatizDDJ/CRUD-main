@@ -56,7 +56,9 @@ function agregarProducto(nombre, descripcion, precio) {
         const productos = JSON.parse(localStorage.getItem('productos')) || [];
     
         const tbody = document.querySelector('#tablaProductos');
+        console.log({tbody});
         tbody.innerHTML = ''; // Limpia el contenido anterior
+        
     
         productos.forEach((producto, index) => {
             const tr = document.createElement('tr');
