@@ -1,6 +1,5 @@
 // URL base del endpoint
 const API_URL = "http://localhost/CRUD-main/backend/api_productos.php"; // Cambia esta URL según corresponda
-
 // Obtener todos los productos (GET)
 function listarProductos() {
   fetch(API_URL)
@@ -16,13 +15,20 @@ function listarProductos() {
 function mostrarTablaProductos(productos) {
   const container = document.getElementById('productosContainer');
   if (!Array.isArray(productos) || productos.length === 0) {
-    container.innerHTML = '<p>No hay productos para mostrar.</p>';
+    container.innerHTML = 'No hay productos para mostrar.';
     return;
   }
   let html = '<table border="1" cellpadding="5"><thead><tr>';
-  html += '<th>ID</th><th>Nombre</th><th>Descripción</th><th>Precio</th></tr></thead><tbody>';
+  html += "<th>ID</th><th>Nombre</th><th>Descripción</th><th>Precio</th><th>Accion</th></tr></thead><tbody>";
   productos.forEach(p => {
-    html += `<tr><td>${p.id}</td><td>${p.nombre}</td><td>${p.descripcion}</td><td>${p.precio}</td></tr>`;
+    html += `<tr>
+      <td>${p.id}</td>
+      <td>${p.nombre}</td>
+      <td>${p.descripcion}</td>
+      <td>${p.precio}</td>
+      <td>
+        <button onclick="eliminarProducto(${p.id})">Eliminar</button>
+      </tr>`;
   });
   html += '</tbody></table>';
   container.innerHTML = html;
@@ -44,8 +50,34 @@ function agregarProducto(nombre, descripcion, precio) {
     body: JSON.stringify({ nombre, descripcion, precio })
   })
     .then(res => res.json()) // Convierte la respuesta a JSON
-    .then(data => console.log("Producto agregado:", data)) // Muestra el resultado en consola
+    .then(data => listarProductos())
     .catch(err => console.error("Error al agregar producto:", err));
+    listarProductos();
+    {
+      // Simulación de productos desde una fuente de datos
+      const productos = JSON.parse(localStorage.getItem('productos')) || [];
+  
+      const tbody = document.querySelector('#tablaProductos');
+      tbody.innerHTML = ''; // Limpia el contenido anterior
+  
+      productos.forEach((producto, index) => {
+          const tr = document.createElement('tr');
+  
+          tr.innerHTML = `
+              <td>${index + 1}</td>
+              <td><span>${producto.nombre}</span></td>
+              <td><span>${producto.descripcion}</span></td>
+              <td><span>${producto.precio.toFixed(2)}</span></td>
+              <td>
+                  <button onclick="editarProducto(${index})">Modificar</button>
+              </td>
+          `;
+  
+          tbody.appendChild(tr);
+      });
+  }
+  
+
 }
 
 // Modificar un producto (PUT)
@@ -62,11 +94,13 @@ function modificarProducto(id, nombre, descripcion, precio) {
 
 // Eliminar un producto (DELETE)
 function eliminarProducto(id) {
-  fetch(`${API_URL}/id/${id}`, {
+  fetch(`${API_URL}?id=${id}`, {
     method: "DELETE"
   })
     .then(res => res.json()) // Convierte la respuesta a JSON
-    .then(data => console.log("Producto eliminado:", data)) // Muestra el resultado en consola
+    .then(data => {
+      listarProductos();
+       console.log("Producto eliminado:", data)}) // Muestra el resultado en consola
     .catch(err => console.error("Error al eliminar producto:", err));
 }
 
