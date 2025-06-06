@@ -50,33 +50,33 @@ function agregarProducto(nombre, descripcion, precio) {
     body: JSON.stringify({ nombre, descripcion, precio })
   })
     .then(res => res.json()) // Convierte la respuesta a JSON
-    .then(data => listarProductos())
+    .then(data =>{
+      listarProductos(); // Actualiza la lista de productos
+        // Simulación de productos desde una fuente de datos
+        const productos = JSON.parse(localStorage.getItem('productos')) || [];
+    
+        const tbody = document.querySelector('#tablaProductos');
+        tbody.innerHTML = ''; // Limpia el contenido anterior
+    
+        productos.forEach((producto, index) => {
+            const tr = document.createElement('tr');
+    
+            tr.innerHTML = `
+                <td>${index + 1}</td>
+                <td><span>${producto.nombre}</span></td>
+                <td><span>${producto.descripcion}</span></td>
+                <td><span>${producto.precio.toFixed(2)}</span></td>
+                <td>
+                    <button onclick="editarProducto(${index})">Modificar</button>
+                </td>
+            `;
+    
+            tbody.appendChild(tr);
+        });
+    
+    } )
     .catch(err => console.error("Error al agregar producto:", err));
-    listarProductos();
-    {
-      // Simulación de productos desde una fuente de datos
-      const productos = JSON.parse(localStorage.getItem('productos')) || [];
-  
-      const tbody = document.querySelector('#tablaProductos');
-      tbody.innerHTML = ''; // Limpia el contenido anterior
-  
-      productos.forEach((producto, index) => {
-          const tr = document.createElement('tr');
-  
-          tr.innerHTML = `
-              <td>${index + 1}</td>
-              <td><span>${producto.nombre}</span></td>
-              <td><span>${producto.descripcion}</span></td>
-              <td><span>${producto.precio.toFixed(2)}</span></td>
-              <td>
-                  <button onclick="editarProducto(${index})">Modificar</button>
-              </td>
-          `;
-  
-          tbody.appendChild(tr);
-      });
-  }
-  
+    
 
 }
 
