@@ -1,47 +1,75 @@
 <!DOCTYPE html>
 <html lang="es">
-<link rel="stylesheet" href="../frontend/css/styles.css">
-
-
 <head>
     <meta charset="UTF-8">
     <title>Gestión de Productos</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
+<body class="bg-light">
 
-<body>
-    <h1>Gestión de Productos</h1>
-    <button onclick="agregarProducto('Producto Demo', 'Descripción demo', 99.99)">Agregar Producto Demo</button>
-    <pre id="output"></pre>
+    <div class="container py-5">
+        <h1 class="text-center mb-5 display-5 text-primary fw-bold">Gestión de Productos</h1>
 
-    <form id="formAgregarProducto" onsubmit="event.preventDefault(); agregarProductoDesdeFormulario();">
-        <h2 id="formTitulo">Agregar Producto</h2>
-        <input type="hidden" id="modoEdicion" value="false">
-        <input type="hidden" id="productoId">
-        
-        <label>Nombre: <input type="text" id="nombreProducto" required></label><br>
-        <label>Descripción: <input type="text" id="descripcionProducto" required></label><br>
-        <label>Precio: <input type="number" id="precioProducto" step="0.01" required></label><br>
-        <button type="submit" id="botonFormulario">Agregar</button>
-    </form>
+        <div class="text-center mb-4">
+            <button class="btn btn-primary px-4" onclick="agregarProducto('Producto Demo', 'Descripción demo', 99.99)">
+                + Agregar Producto Demo
+            </button>
+        </div>
 
-    <div id="productosContainer">
-        <table> 
-            <thead>
-                <tr>
-                    <th>ID</th>
-                    <th>Nombre</th>
-                    <th>Descripción</th>
-                    <th>Precio</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody id="tablaProductos">
-            </tbody>
-        </table>
+
+        <div class="card shadow border-0 mb-5">
+            <div class="card-header bg-primary text-white">
+                <h2 id="formTitulo" class="h5 m-0">Agregar Producto</h2>
+            </div>
+            <div class="card-body">
+                <form id="formAgregarProducto" onsubmit="event.preventDefault(); agregarProductoDesdeFormulario();">
+                    <input type="hidden" id="modoEdicion" value="false">
+                    <input type="hidden" id="productoId">
+                    
+                    <div class="row g-3">
+                        <div class="col-md-4">
+                            <label for="nombreProducto" class="form-label text-primary">Nombre</label>
+                            <input type="text" id="nombreProducto" class="form-control border-primary" required>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="descripcionProducto" class="form-label text-primary">Descripción</label>
+                            <input type="text" id="descripcionProducto" class="form-control border-primary" required>
+                        </div>
+
+                        <div class="col-md-4">
+                            <label for="precioProducto" class="form-label text-primary">Precio</label>
+                            <input type="number" id="precioProducto" class="form-control border-primary" step="0.01" required>
+                        </div>
+                    </div>
+
+                    <div class="text-end mt-4">
+                        <button type="submit" class="btn btn-primary" id="botonFormulario">Agregar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div id="productosContainer" class="table-responsive">
+            <table class="table table-bordered table-hover text-center align-middle">
+                <thead class="table-primary text-dark">
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        <th>Precio</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tablaProductos">
+                    <!-- Productos cargados dinámicamente -->
+                </tbody>
+            </table>
+        </div>
     </div>
-    <script src="./js/producto.js"> </script>
-    <script>listarProductos(); </script>
 
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="./js/producto.js"></script>
+    <script>listarProductos();</script>
 </body>
-
 </html>
