@@ -82,10 +82,7 @@ function agregarProducto(nombre, descripcion, precio) {
     
     } )
     .catch(err => console.error("Error al agregar producto:", err));
-    
-
 }
-
 // Modificar un producto (PUT)
 function modificarProducto(id, nombre, descripcion, precio) {
   fetch(`${API_URL}?id=${id}`, {
@@ -96,7 +93,8 @@ function modificarProducto(id, nombre, descripcion, precio) {
     .then(res => res.json())
     .then(data => {
       console.log("Producto modificado:", data);
-      listarProductos(); // <-- Agregado acá
+      document.getElementById('formAgregarProducto').reset();
+      listarProductos();
     })
     .catch(err => console.error("Error al modificar producto:", err));
 }
@@ -147,18 +145,6 @@ function cargarProductoEnFormulario(id) {
     })
     .catch(err => console.error("Error al cargar producto para editar:", err));
     
-}
-function modificarProductoDesdeFormulario(id) {
-  const nombre = document.getElementById("nombreProducto").value;
-  const descripcion = document.getElementById("descripcionProducto").value;
-  const precio = parseFloat(document.getElementById("precioProducto").value);
-
-  modificarProducto(id, nombre, descripcion, precio);
-  document.getElementById("formAgregarProducto").reset();
-  document.getElementById("modoEdicion").value = "false";
-  document.getElementById("botonFormulario").textContent = "Agregar";
-  document.getElementById("formTitulo").textContent = "Agregar Producto";
-  listarProductos();
 }
 
 // Ejemplos de uso
