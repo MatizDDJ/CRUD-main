@@ -1,6 +1,8 @@
 // URL base del endpoint
 const API_URL = "http://localhost/CRUD-main/backend/api_productos.php"; // Cambia esta URL según corresponda
 // Obtener todos los productos (GET)
+let productoEnEdicion = null; // guardamos el producto que estamos editando
+
 function listarProductos() {
   fetch(API_URL)
     .then(res => res.json()) // Convierte la respuesta a JSON
@@ -19,7 +21,7 @@ function mostrarTablaProductos(productos) {
     return;
   }
   let html = '<table border="1" cellpadding="5"><thead><tr>';
-  html += "<th>ID</th><th>Nombre</th><th>Descripción</th><th>Precio</th><th>Accion</th><th>Modificar</th></tr></thead><tbody>";
+  html += "<th>ID</th><th>Nombre</th><th>Descripción</th><th>Precio</th><th>Accion</th></tr></thead><tbody>";
   productos.forEach(p => {
     html += `<tr>
       <td>${p.id}</td>
@@ -28,7 +30,8 @@ function mostrarTablaProductos(productos) {
       <td>${p.precio}</td>
       <td>
         <button onclick="eliminarProducto(${p.id})">Eliminar</button>
-        <button onclick="modificarProducto(${p.id})">Modificar</button>
+        <button onclick="cargarProductoEnFormulario(${p.id})">Modificar</button>
+      </td>
       </tr>`;
   });
   html += '</tbody></table>';
@@ -90,8 +93,11 @@ function modificarProducto(id, nombre, descripcion, precio) {
     headers: { "Content-Type": "application/json" }, 
     body: JSON.stringify({ id, nombre, descripcion, precio })
   })
-    .then(res => res.json()) // Convierte la respuesta a JSON
-    .then(data => console.log("Producto modificado:", data)) // Muestra el resultado en consola
+    .then(res => res.json())
+    .then(data => {
+      console.log("Producto modificado:", data);
+      listarProductos(); // <-- Agregado acá
+    })
     .catch(err => console.error("Error al modificar producto:", err));
 }
 
@@ -107,15 +113,53 @@ function eliminarProducto(id) {
     .catch(err => console.error("Error al eliminar producto:", err));
 }
 function agregarProductoDesdeFormulario() {
-let nombre = document.getElementById('nombreProducto').value;
-let descripcion = document.getElementById('descripcionProducto').value;
-let precio = parseFloat(document.getElementById('precioProducto').value);
-agregarProducto(nombre, descripcion, precio);
-document.getElementById('formAgregarProducto').reset();
-listarProductos();
+  let nombre = document.getElementById('nombreProducto').value;
+  let descripcion = document.getElementById('descripcionProducto').value;
+  let precio = parseFloat(document.getElementById('precioProducto').value);
 
+  if (productoEnEdicion) {
+    // Si hay producto en edición, modifico
+    modificarProducto(productoEnEdicion.id, nombre, descripcion, precio)
+      .then(() => {
+        productoEnEdicion = null; // limpio variable edición
+        document.getElementById('formAgregarProducto').reset();
+        document.querySelector('#formAgregarProducto button[type="submit"]').textContent = 'Agregar'; // vuelvo a texto original
+        listarProductos();
+      });
+  } else {
+    // Si no, agrego nuevo producto
+    agregarProducto(nombre, descripcion, precio);
+    document.getElementById('formAgregarProducto').reset();
+    listarProductos();
+  }
 }
 
+function cargarProductoEnFormulario(id) {
+  fetch(`${API_URL}?id=${id}`)
+    .then(res => res.json())
+    .then(producto => {
+      document.getElementById('nombreProducto').value = producto.nombre;
+      document.getElementById('descripcionProducto').value = producto.descripcion;
+      document.getElementById('precioProducto').value = producto.precio;
+      productoEnEdicion = producto;  // guardo el producto en edición
+      document.querySelector('#formAgregarProducto button[type="submit"]').textContent = 'Modificar'; // cambio texto botón
+      listarProductos();
+    })
+    .catch(err => console.error("Error al cargar producto para editar:", err));
+    
+}
+function modificarProductoDesdeFormulario(id) {
+  const nombre = document.getElementById("nombreProducto").value;
+  const descripcion = document.getElementById("descripcionProducto").value;
+  const precio = parseFloat(document.getElementById("precioProducto").value);
+
+  modificarProducto(id, nombre, descripcion, precio);
+  document.getElementById("formAgregarProducto").reset();
+  document.getElementById("modoEdicion").value = "false";
+  document.getElementById("botonFormulario").textContent = "Agregar";
+  document.getElementById("formTitulo").textContent = "Agregar Producto";
+  listarProductos();
+}
 
 // Ejemplos de uso
 // listarProductos();

@@ -10,22 +10,19 @@
 
 <body>
     <h1>Gestión de Productos</h1>
-
-    <button onclick="listarProductos()">Listar Productos</button>
-    <button onclick="mostrarProducto(1)">Mostrar Producto con ID 1</button>
     <button onclick="agregarProducto('Producto Demo', 'Descripción demo', 99.99)">Agregar Producto Demo</button>
-    <button onclick="modificarProducto(1, 'Producto Modificado', 'Descripción modificada', 123.45)">Modificar Producto con ID 1</button>
-    <button onclick="eliminarProducto(1)">Eliminar Producto con ID 1</button>
-
     <pre id="output"></pre>
 
     <form id="formAgregarProducto" onsubmit="event.preventDefault(); agregarProductoDesdeFormulario();">
-        <h2>Agregar Producto</h2>
+        <h2 id="formTitulo">Agregar Producto</h2>
+        <input type="hidden" id="modoEdicion" value="false">
+        <input type="hidden" id="productoId">
+        
         <label>Nombre: <input type="text" id="nombreProducto" required></label><br>
         <label>Descripción: <input type="text" id="descripcionProducto" required></label><br>
         <label>Precio: <input type="number" id="precioProducto" step="0.01" required></label><br>
-        <button type="submit">Agregar</button>
-    </form> 
+        <button type="submit" id="botonFormulario">Agregar</button>
+    </form>
 
     <div id="productosContainer">
         <table> 
@@ -43,7 +40,7 @@
         </table>
     </div>
     <script src="./js/producto.js"> </script>
-    <script> listarProductos(); </script>
+    <script>listarProductos(); </script>
 
 </body>
 
