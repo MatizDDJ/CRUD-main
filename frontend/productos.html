@@ -42,22 +42,9 @@
             </tbody>
         </table>
     </div>
-    <script src="./js/producto.js"> 
-    </script>
-    <script>
-             listarProductos();
-        // Función para agregar producto desde el formulario
-        function agregarProductoDesdeFormulario() {
-            let nombre = document.getElementById('nombreProducto').value;
-            let descripcion = document.getElementById('descripcionProducto').value;
-            let precio = parseFloat(document.getElementById('precioProducto').value);
-            agregarProducto(nombre, descripcion, precio);
-            document.getElementById('formAgregarProducto').reset();
-            listarProductos();
-       
-        }
-        
-    </script>
+    <script src="./js/producto.js"> </script>
+    <script> listarProductos(); </script>
+
 </body>
 
 </html>

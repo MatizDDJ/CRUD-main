@@ -19,7 +19,7 @@ function mostrarTablaProductos(productos) {
     return;
   }
   let html = '<table border="1" cellpadding="5"><thead><tr>';
-  html += "<th>ID</th><th>Nombre</th><th>Descripción</th><th>Precio</th><th>Accion</th></tr></thead><tbody>";
+  html += "<th>ID</th><th>Nombre</th><th>Descripción</th><th>Precio</th><th>Accion</th><th>Modificar</th></tr></thead><tbody>";
   productos.forEach(p => {
     html += `<tr>
       <td>${p.id}</td>
@@ -28,6 +28,7 @@ function mostrarTablaProductos(productos) {
       <td>${p.precio}</td>
       <td>
         <button onclick="eliminarProducto(${p.id})">Eliminar</button>
+        <button onclick="modificarProducto(${p.id})">Modificar</button>
       </tr>`;
   });
   html += '</tbody></table>';
@@ -84,9 +85,9 @@ function agregarProducto(nombre, descripcion, precio) {
 
 // Modificar un producto (PUT)
 function modificarProducto(id, nombre, descripcion, precio) {
-  fetch(API_URL, {
+  fetch(`${API_URL}?id=${id}`, {
     method: "PUT",
-    headers: { "Content-Type": "application/json" },
+    headers: { "Content-Type": "application/json" }, 
     body: JSON.stringify({ id, nombre, descripcion, precio })
   })
     .then(res => res.json()) // Convierte la respuesta a JSON
@@ -105,6 +106,16 @@ function eliminarProducto(id) {
        console.log("Producto eliminado:", data)}) // Muestra el resultado en consola
     .catch(err => console.error("Error al eliminar producto:", err));
 }
+function agregarProductoDesdeFormulario() {
+let nombre = document.getElementById('nombreProducto').value;
+let descripcion = document.getElementById('descripcionProducto').value;
+let precio = parseFloat(document.getElementById('precioProducto').value);
+agregarProducto(nombre, descripcion, precio);
+document.getElementById('formAgregarProducto').reset();
+listarProductos();
+
+}
+
 
 // Ejemplos de uso
 // listarProductos();
