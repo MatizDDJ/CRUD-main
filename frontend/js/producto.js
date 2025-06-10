@@ -27,10 +27,10 @@ function mostrarTablaProductos(productos) {
       <td>${p.id}</td>
       <td>${p.nombre}</td>
       <td>${p.descripcion}</td>
-      <td>${p.precio}</td>
+      <td>${p.precio}</td>"
       <td>
-        <button onclick="eliminarProducto(${p.id})">Eliminar</button>
-        <button onclick="cargarProductoEnFormulario(${p.id})">Modificar</button>
+        <button type="button" class="btn btn-danger" title="Eliminar" onclick="eliminarProducto(${p.id})"><i class="fa-solid fa-trash"></i></button>
+        <button type="button" class="btn btn-secondary" title="Modificar" onclick="cargarProductoEnFormulario(${p.id})"><i class="fa-solid fa-pencil"></i></button>
       </td>
       </tr>`;
   });
